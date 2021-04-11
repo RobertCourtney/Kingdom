@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Multisense S21 stereo camera: Generate disparity images and point clouds -->
+  <arg name="namespace"  default="Multisense" />
+  <node pkg="nodelet" type="nodelet" name="nodelet_manager"  args="manager"/>
+  <node pkg="nodelet" type="nodelet" name="Plus" args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager rgb/camera_info:=/Multisense/left/image_rect_color/camera_info rgb/image_rect_color:=/Multisense/left/image_rect_color depth_registered/image_rect:=/Multisense/depth">
+    <remap from="/depth_registered/points" to="$(arg namespace)/image_points2_color"/>
+  </node>
+  
+   <node pkg="nodelet" type="nodelet" name="MImage" args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager rgb/camera_info:=/Multisense/left/image_rect_color/camera_info rgb/image_rect_color:=/Multisense/left/masked_image depth_registered/image_rect:=/Multisense/depth">
+    <remap from="/depth_registered/points" to="$(arg namespace)/image_points2_color_masked"/>
+  </node>
+
+</launch>
+<!--
+  <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
+
+  <node pkg="nodelet" type="nodelet" name="nodelet1"
+        args="load depth_image_proc/point_cloud_xyz nodelet_manager">
+    <remap from="Multisense/left/image_rect_color/camera_info" to="camera_info"/>
+    <remap from="Multisense/left/image_rect_color" to="image_rect"/>
+  </node>
+-->

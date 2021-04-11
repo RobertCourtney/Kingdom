@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="bag_rate" default="0.5" />
+  <arg name="bag_start" default="10.0" />
+  <arg name="rviz" default="true" />
+  <arg name="file" default="/home/robert/Desktop/2016-10-25-11-09-42_trimmed.bag.bag" />
+  
+  <param name="use_sim_time" value="true"/>
+  <node pkg="rosbag" type="play" name="player" required="true" args="$(arg file) --clock --rate=$(arg bag_rate) --start=$(arg bag_start)">
+		<remap from="tf" to="tf_old" />
+  </node>
+
+    <!-- Startup stereo depth image -->
+    <include file="$(find people_detection)/launch/peopledetect.launch">
+    </include>
+    
+<!-- Startup vehicle tfs fake for now" -->
+<!-- publish  /vehicle -> /velodyne transform -->
+    <node pkg="tf2_ros" type="static_transform_publisher"
+        name="vehicle_velodyne_tf"
+        args="0.393 0.278 2.4 -0.02155 0.0164 0.00621 vehicle velodyne" />
+
+<!-- publish identity /odom -> /vehicle transform(for viewing sensor data for a static vehicle) -->
+    <node pkg="tf2_ros" type="static_transform_publisher"
+        name="vehicle_is_odom"
+        args="0 0 0 0 0 0 odom vehicle" />
+
+</launch>

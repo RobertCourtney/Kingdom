@@ -1,0 +1,8 @@
+prefix=/home/robert/catkin_ws/devel
+
+Name: people_detection
+Description: Description of people_detection
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
